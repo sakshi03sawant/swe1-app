@@ -77,19 +77,20 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 import os
-from pathlib import Path
 
-DB_PATH = BASE_DIR / "db.sqlite3"
-if os.environ.get("AWS_EXECUTION_ENV"):
-    DB_PATH = Path("/tmp/db.sqlite3")
+# Local (your laptop): use project db.sqlite3
+# Elastic Beanstalk (server): use writable /tmp/db.sqlite3
+if os.path.exists("/var/app"):
+    DB_NAME = "/tmp/db.sqlite3"
+else:
+    DB_NAME = BASE_DIR / "db.sqlite3"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(DB_PATH),
+        "NAME": str(DB_NAME),
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
