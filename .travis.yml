@@ -1,0 +1,37 @@
+language: python
+
+python:
+  - "3.11"
+
+cache: pip
+
+install:
+  - python -m pip install --upgrade pip
+  - pip install -r requirements.txt
+
+before_script:
+  - python manage.py migrate
+
+script:
+  - black --check .
+  - flake8 .
+  - coverage run manage.py test
+
+after_success:
+  - coveralls
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: "$AWS_ACCESS_KEY_ID"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY"
+  region: "$AWS_DEFAULT_REGION"
+  app: "$AWS_EB_APP"
+  env: "$AWS_EB_ENV"
+  bucket: "$AWS_EB_BUCKET"
+  edge: true
+  wait_until_deployed: true
+  on:
+    branch: main
+
+
+
