@@ -16,5 +16,8 @@ class ProjectSmokeTests(SimpleTestCase):
     def test_polls_app_is_installed(self):
         self.assertTrue(apps.is_installed("polls"))
 
+    def test_dummy(self):
+        self.assertTrue(False)
+
 
 # Create your tests here.
